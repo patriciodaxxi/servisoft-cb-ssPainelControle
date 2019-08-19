@@ -84,13 +84,14 @@ begin
       sds.NoMetadata    := True;
       sds.GetMetadata   := False;
       vFlag2 := 1;
-      while vFlag2 = 1 do
+      //19/08/2019   Tirado o Flag Inicio, pois aqui no painel não vai ter vários usuários entrando ao mesmo tempo nele.
+      {while vFlag2 = 1 do
       begin
         sds.Close;
         sds.CommandText   := 'SELECT FLAG  FROM TABELALOC WHERE TABELA = ' + QuotedStr('INICIO');
         sds.Open;
         vFlag2 := sds.FieldByName('FLAG').AsInteger;
-      end;
+      end;}
       sqVersaoAtual.Close;
       sqVersaoAtual.Open;
       cdsVersao.Close;
@@ -99,11 +100,12 @@ begin
       if cdsVersao.IsEmpty then
         exit;
 
-      sds.Close;
+      //19/08/2019   Tirado o Flag Inicio, pois aqui no painel não vai ter vários usuários entrando ao mesmo tempo nele.
+      {sds.Close;
       sds.NoMetadata    := True;
       sds.GetMetadata   := False;
       sds.CommandText   := ' UPDATE TABELALOC SET FLAG = 1 WHERE TABELA = ' + QuotedStr('INICIO');
-      sds.ExecSQL();
+      sds.ExecSQL();}
 
       vErro  := False;
       arqLog := 'FDBUpdate_' + FormatDateTime('YYYYMMDD',Date) +  '_' + FormatDateTime('HHMMSS',Time) +  '.log';

@@ -91,7 +91,7 @@ ImageBase=4194304
 ExeDescription=
 [Directories]
 OutputDir=C:\Delphi7\SSFacil\EXE
-UnitOutputDir=c:\Delphi7\ssPainelControle\DCU
+UnitOutputDir=c:\Delphi7\SSFacil\DCU
 PackageDLLOutputDir=
 PackageDCPOutputDir=
 SearchPath=
@@ -135,25 +135,24 @@ ProductName=
 ProductVersion=1.0.0.0
 Comments=
 [Excluded Packages]
-C:\Program Files (x86)\FastReports\FastReport 5\LibD7\dclfrxbde7.bpl=FastReport 5.0 BDE Components
 D:\Componentes7\pacotecjvd7sf\PacoteCJV.bpl=Pacote de Componentes CJV
-C:\Program Files (x86)\FastReports\FastReport 5\LibD7\dclfrxcs7.bpl=FastReport 5.0 Client/Server Components
 c:\program files (x86)\borland\delphi7\Projects\Bpl\RLBoletoD7.bpl=RLBoleto (by Produsys Sistemas e Internet
 c:\program files (x86)\borland\delphi7\Projects\Bpl\Dclqrt50.bpl=QuickReport Components
 C:\Acbr\Lib\Delphi\LibD7\ACBrNFeDanfeFRpkg.bpl=ACBr - DANFe em FastReport - (http://www.projetoacbr.com.br/)
 C:\Acbr\Lib\Delphi\LibD7\ACBrCTeDacteFRpkg.bpl=ACBr - DACTe em FastReport - (http://www.projetoacbr.com.br/)
 C:\Acbr\Lib\Delphi\LibD7\ACBrNFSeDanfseFRpkg.bpl=ACBr - DANFSe em FastReport - (http://www.projetoacbr.com.br/)
-C:\Acbr\Lib\Delphi\LibD7\ACBr_BoletoFC_FR.bpl=ACBr - Boleto Impressão em  FastReport - (http://www.projetoacbr.com.br/)
 C:\Acbr\Lib\Delphi\LibD7\ACBrMDFeDAMDFEFRpkg.bpl=ACBr - DAMDFe em FastReport - (http://www.projetoacbr.com.br/)
-C:\Acbr\Lib\Delphi\LibD7\ACBrGNREGuiaFRpkg.bpl=ACBr - GNRE Impressão da Guia em FastReport - (http://www.projetoacbr.com.br/)
-C:\Acbr\Lib\Delphi\LibD7\ACBrGNREGuiaRLpkg.bpl=ACBr - GNRE Impressão em FortesReport - (http://www.projectoacbr.com.br/)
+C:\Program Files (x86)\FastReports\FastReport 5\LibD7\dclfrxcs7.bpl=FastReport 5.0 Client/Server Components
+C:\Program Files (x86)\FastReports\FastReport 5\LibD7\dclfrxbde7.bpl=FastReport 5.0 BDE Components
 C:\Program Files (x86)\FastReports\FastReport 5\LibD7\dclfsbde7.bpl=FastScript 1.9 BDE Components
+c:\program files (x86)\borland\delphi7\Bin\DBWEBXPRT.BPL=Borland Web Wizard Package
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
 [HistoryLists\hlUnitOutputDirectory]
-Count=1
-Item0=c:\Delphi7\ssPainelControle\DCU
+Count=2
+Item0=c:\Delphi7\SSFacil\DCU
+Item1=c:\Delphi7\ssPainelControle\DCU
 [HistoryLists\hlOutputDirectorry]
 Count=2
 Item0=C:\Delphi7\SSFacil\EXE
