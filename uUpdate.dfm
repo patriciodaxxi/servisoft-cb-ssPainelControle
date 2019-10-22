@@ -2,7 +2,7 @@ object frmUpdate: TfrmUpdate
   Left = 290
   Top = 155
   Width = 496
-  Height = 331
+  Height = 368
   Caption = 'frmUpdate'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -47,7 +47,7 @@ object frmUpdate: TfrmUpdate
       Height = 13
       Align = alTop
       Alignment = taRightJustify
-      Caption = 'Vers'#227'o 19/08/2019  '
+      Caption = 'Vers'#227'o 21/10/2019  '
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -58,7 +58,7 @@ object frmUpdate: TfrmUpdate
   end
   object Panel2: TPanel
     Left = 0
-    Top = 247
+    Top = 284
     Width = 488
     Height = 53
     Align = alBottom
@@ -110,7 +110,7 @@ object frmUpdate: TfrmUpdate
       OnClick = BitBtn2Click
     end
     object BitBtn1: TBitBtn
-      Left = 298
+      Left = 299
       Top = 4
       Width = 100
       Height = 27
@@ -129,14 +129,14 @@ object frmUpdate: TfrmUpdate
     Left = 0
     Top = 62
     Width = 488
-    Height = 116
+    Height = 154
     Align = alClient
     TabOrder = 2
     object CheckListBox1: TCheckListBox
       Left = 8
       Top = 16
       Width = 465
-      Height = 89
+      Height = 125
       Columns = 2
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -159,9 +159,9 @@ object frmUpdate: TfrmUpdate
   end
   object Panel4: TPanel
     Left = 0
-    Top = 178
+    Top = 216
     Width = 488
-    Height = 69
+    Height = 68
     Align = alBottom
     Color = clBtnShadow
     TabOrder = 3
@@ -202,7 +202,7 @@ object frmUpdate: TfrmUpdate
     end
     object lblVersaoBanco: TLabel
       Left = 1
-      Top = 48
+      Top = 47
       Width = 486
       Height = 20
       Align = alBottom

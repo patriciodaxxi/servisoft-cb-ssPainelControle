@@ -1,8 +1,8 @@
 object dmDatabase: TdmDatabase
   OldCreateOrder = False
   OnCreate = DataModuleCreate
-  Left = 90
-  Top = 113
+  Left = 364
+  Top = 153
   Height = 408
   Width = 528
   object scoDados: TSQLConnection
@@ -73,7 +73,8 @@ object dmDatabase: TdmDatabase
       'Interbase TransIsolation=ReadCommited'
       'Trim Char=False')
     VendorLib = 'gds32.dll'
-    Left = 41
+    Connected = True
+    Left = 42
     Top = 80
   end
   object sqVersaoAtual: TSQLQuery
@@ -82,8 +83,8 @@ object dmDatabase: TdmDatabase
     SQL.Strings = (
       'SELECT VERSAO_BANCO FROM PARAMETROS')
     SQLConnection = scoDados
-    Left = 233
-    Top = 80
+    Left = 236
+    Top = 85
     object sqVersaoAtualVERSAO_BANCO: TIntegerField
       FieldName = 'VERSAO_BANCO'
     end
@@ -116,7 +117,7 @@ object dmDatabase: TdmDatabase
     IndexFieldNames = 'ID'
     Params = <>
     ProviderName = 'dspVersao'
-    Left = 184
+    Left = 185
     Top = 80
     object cdsVersaoID: TIntegerField
       FieldName = 'ID'
@@ -125,6 +126,20 @@ object dmDatabase: TdmDatabase
     object cdsVersaoSCRIPT: TBlobField
       FieldName = 'SCRIPT'
       Size = 1
+    end
+  end
+  object qMax: TSQLQuery
+    MaxBlobSize = -1
+    Params = <>
+    SQL.Strings = (
+      'SELECT MAX(ID) ID'
+      'FROM VERSAO'
+      'WHERE IMPLANTADA = '#39'S'#39)
+    SQLConnection = scoAtualiza
+    Left = 168
+    Top = 149
+    object qMaxID: TIntegerField
+      FieldName = 'ID'
     end
   end
 end

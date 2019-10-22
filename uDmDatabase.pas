@@ -22,6 +22,8 @@ type
     cdsVersao: TClientDataSet;
     cdsVersaoID: TIntegerField;
     cdsVersaoSCRIPT: TBlobField;
+    qMax: TSQLQuery;
+    qMaxID: TIntegerField;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
@@ -56,65 +58,39 @@ var
   sds: TSQLDataSet;
   vFlag2: Integer;
   vMicroAtual: Boolean;
+  i : Integer;
+  i2 : Integer;
+  ctVersao : String;
 begin
-   // verifica se alguém está atualizando
-  {sds := TSQLDataSet.Create(nil);
-  sds.SQLConnection := dmDatabase.scoDados;
-  sds.NoMetadata    := True;
-  sds.GetMetadata   := False;
-  vFlag2 := 1;
-  while vFlag2 = 1 do
-  begin
-  	sds.Close;
-  	sds.CommandText   := 'SELECT FLAG  FROM TABELALOC WHERE TABELA = ' + QuotedStr('INICIO');
-  	sds.Open;
-  	vFlag2 := sds.FieldByName('FLAG').AsInteger;
-  end;}
-  //
+  arqLog := '';
+  vErro  := False;
+  arqLog := 'FDBUpdate_' + FormatDateTime('YYYYMMDD',Date) +  '_' + FormatDateTime('HHMMSS',Time) +  '.log';
+  AssignFile(F,arqLog);
+  ReWrite(F);
 
+  ctVersao := sdsVersao.CommandText;
+  sqVersaoAtual.Close;
   sqVersaoAtual.Open;
-  sdsVersao.CommandText := sdsVersao.CommandText + ' AND ID > ' + sqVersaoAtualVERSAO_BANCO.AsString + ' AND PROGRAMA_ID = 1 ';
-  cdsVersao.Open;
-  if not cdsVersao.IsEmpty then
+  i := sqVersaoAtualVERSAO_BANCO.AsInteger;
+  qMax.Close;
+  qMax.Open;
+  i2 := qMaxID.AsInteger;
+  i  := i + 1;
+  while i <= i2 do
   begin
-    try
-      arqLog := '';
-      sds := TSQLDataSet.Create(nil);
-      sds.SQLConnection := dmDatabase.scoDados;
-      sds.NoMetadata    := True;
-      sds.GetMetadata   := False;
-      vFlag2 := 1;
-      //19/08/2019   Tirado o Flag Inicio, pois aqui no painel não vai ter vários usuários entrando ao mesmo tempo nele.
-      {while vFlag2 = 1 do
-      begin
-        sds.Close;
-        sds.CommandText   := 'SELECT FLAG  FROM TABELALOC WHERE TABELA = ' + QuotedStr('INICIO');
-        sds.Open;
-        vFlag2 := sds.FieldByName('FLAG').AsInteger;
-      end;}
-      sqVersaoAtual.Close;
-      sqVersaoAtual.Open;
-      cdsVersao.Close;
-      sdsVersao.CommandText := sdsVersao.CommandText + ' AND ID > ' + sqVersaoAtualVERSAO_BANCO.AsString + ' AND PROGRAMA_ID = 1 ';
-      cdsVersao.Open;
-      if cdsVersao.IsEmpty then
-        exit;
+    cdsVersao.close;
+    sdsVersao.CommandText := ctVersao + ' AND ID = ' + IntToStr(i) + ' AND PROGRAMA_ID = 1 ';
+    cdsVersao.Open;
+    if not cdsVersao.IsEmpty then
+    begin
+      try
+        sds := TSQLDataSet.Create(nil);
+        sds.SQLConnection := dmDatabase.scoDados;
+        sds.NoMetadata    := True;
+        sds.GetMetadata   := False;
+        vFlag2 := 1;
 
-      //19/08/2019   Tirado o Flag Inicio, pois aqui no painel não vai ter vários usuários entrando ao mesmo tempo nele.
-      {sds.Close;
-      sds.NoMetadata    := True;
-      sds.GetMetadata   := False;
-      sds.CommandText   := ' UPDATE TABELALOC SET FLAG = 1 WHERE TABELA = ' + QuotedStr('INICIO');
-      sds.ExecSQL();}
-
-      vErro  := False;
-      arqLog := 'FDBUpdate_' + FormatDateTime('YYYYMMDD',Date) +  '_' + FormatDateTime('HHMMSS',Time) +  '.log';
-      AssignFile(F,arqLog);
-      ReWrite(F);
-
-      while not cdsVersao.Eof do
-      begin
-        S := cdsVersaoSCRIPT.AsString; // ScriptFile: String - your whole script
+        S := cdsVersaoSCRIPT.AsString;
         vFlag := True;
         while vFlag do
         begin
@@ -126,9 +102,6 @@ begin
             vSQL_Ant := Command;
 
           sdsExec.CommandText := (Command);
-          //SQLQuery1.ParamCheck := False;
-          //SQLQuery1.SQL.Text := command;
-          //SQLQuery1.SQL.SaveToFile('C:\a\testeedson.txt');
           if trim(sdsExec.CommandText) <> '' then
           begin
             ID.TransactionID  := 99;
@@ -136,7 +109,6 @@ begin
             dmDatabase.scoDados.StartTransaction(ID);
             try
               sdsExec.ExecSQL(True);
-              //SQLQuery1.ExecSQL(True);
               dmDatabase.scoDados.Commit(ID);
             except
               WriteLn(F,'----------------------------');
@@ -145,8 +117,6 @@ begin
               dmDatabase.scoDados.Rollback(ID);
             end;
           end;
-          //sdsExec.CommandText := ('UPDATE PARAMETROS SET VERSAO_BANCO = ' + cdsVersaoID.AsString);
-          //sdsExec.ExecSQL(True);
           Delete(S, 1, DelimiterPos);
           if Length(S) = 0 then
             vFlag := False;
@@ -154,23 +124,36 @@ begin
         sdsExec.CommandText := ('UPDATE PARAMETROS SET VERSAO_BANCO = ' + cdsVersaoID.AsString);
         sdsExec.ExecSQL(True);
 
-        cdsVersao.Next;
-      end;
-    finally
-      if trim(arqLog) <> '' then
-        CloseFile(F);
-      if not(vErro) then
-        DeleteFile(arqLog);
-      sds.Close;
-      sds.NoMetadata    := True;
-      sds.GetMetadata   := False;
-      sds.CommandText   := ' UPDATE TABELALOC SET FLAG = 0 WHERE TABELA = ' + QuotedStr('INICIO');
-      sds.ExecSQL();
+      finally
+        //if trim(arqLog) <> '' then
+        //  CloseFile(F);
+        //if not(vErro) then
+        //  DeleteFile(arqLog);
+        sds.Close;
+        sds.NoMetadata    := True;
+        sds.GetMetadata   := False;
+        sds.CommandText   := ' UPDATE TABELALOC SET FLAG = 0 WHERE TABELA = ' + QuotedStr('INICIO');
+        sds.ExecSQL();
 
-      FreeAndNil(sds);
+        FreeAndNil(sds);
+      end;
+    end;
+
+    i := i + 1;
+    if i <= i2 then
+    begin
+      scoDados.Connected := False;
+      scoDados.Connected := True;
     end;
   end;
+
+  if trim(arqLog) <> '' then
+    CloseFile(F);
+  if not(vErro) then
+    DeleteFile(arqLog);
+
   cdsVersao.Close;
+  scoDados.Connected := False;
   sqVersaoAtual.Close;
   scoAtualiza.Connected := False;
 end;
