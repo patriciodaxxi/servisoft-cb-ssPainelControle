@@ -9,7 +9,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, ExtCtrls, ComCtrls, StdCtrls,
   Buttons, IniFiles, Gauges, IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient, IdFTP, IdCoder, IdCoder3to4,
-  IdCoderMIME, ZipMstr, CheckLst;
+  IdCoderMIME, ZipMstr, CheckLst, DBXpress, SqlExpr;
 
 type
   threadFTP = class(TThread)
@@ -38,7 +38,11 @@ type
     BitBtn2: TBitBtn;
     CheckListBox1: TCheckListBox;
     BitBtn1: TBitBtn;
-    lblVersaoBanco: TLabel;
+    lblVersaoNFEBD: TLabel;
+    Label4: TLabel;
+    lblVersaoLocal: TLabel;
+    Label6: TLabel;
+    lblVersaoAtualizacao: TLabel;
     procedure btnAtualizarClick(Sender: TObject);
     procedure ftpUpdateStatus(ASender: TObject; const AStatus: TIdStatus; const AStatusText: String);
     procedure ftpUpdateWork(Sender: TObject; AWorkMode: TWorkMode; const AWorkCount: Integer);
@@ -54,6 +58,9 @@ type
     arquivo_local, arquivo_servidor: String;
     procedure Descompacta(vArquivo: String);
     function lerIni(tabela_ini, campo_ini: string): string;
+
+    procedure prc_Atualiza_Banco_Local;
+
   public
     { Public declarations }
   end;
@@ -63,7 +70,7 @@ var
 
 implementation
 
-uses uMenu, uDmDatabase;
+uses uMenu, uDmDatabase, DmdDatabase_NFeBD;
 
 {$R *.dfm}
 
@@ -453,22 +460,149 @@ end;
 procedure TfrmUpdate.BitBtn1Click(Sender: TObject);
 begin
   Screen.Cursor := crHourGlass;
-  dmDatabase.prcAtualizaBanco;
+  //dmDatabase.prcAtualizaBanco;
+  prc_Atualiza_Banco_Local;
+
   FormShow(Sender);
   Screen.Cursor := crDefault;
   ShowMessage('Concluído!');
 end;
 
 procedure TfrmUpdate.FormShow(Sender: TObject);
-var
-  vVersaoAtu: string;
 begin
-  vVersaoAtu := IntToStr(dmDatabase.fncVersoDoAtualiza);
-
   dmDatabase.sqVersaoAtual.Open;
-  lblVersaoBanco.Caption := 'Versão do banco local: ' + dmDatabase.sqVersaoAtualVERSAO_BANCO.AsString + ' / ' + 
-                            'Versão do banco de atualização: ' + vVersaoAtu;
+  lblVersaoAtualizacao.Caption := FormatFloat('0000',dmDatabase.fncVersoDoAtualiza);
+  lblVersaoLocal.Caption       := FormatFloat('0000',dmDatabase.sqVersaoAtualVERSAO_BANCO.AsInteger);
   dmDatabase.sqVersaoAtual.Close;
+end;
+
+procedure TfrmUpdate.prc_Atualiza_Banco_Local;
+var
+  DelimiterPos: Integer;
+  S: WideString;
+  Command: WideString;
+  vFlag, vErro: Boolean;
+  F: TextFile;
+  arqLog: String;
+  vID_Versao: Integer;
+  vSQL_Ant: WideString;
+  ID, ID2: TTransactionDesc;
+  sds: TSQLDataSet;
+  vFlag2: Integer;
+  vMicroAtual: Boolean;
+  i : Integer;
+  i2 : Integer;
+  ctVersao : String;
+  vMSGErro : String;
+begin
+  arqLog := '';
+  vErro  := False;
+  arqLog := 'FDBUpdate_' + FormatDateTime('YYYYMMDD',Date) +  '_' + FormatDateTime('HHMMSS',Time) +  '.log';
+  AssignFile(F,arqLog);
+  ReWrite(F);
+
+
+  vMSGErro := '';
+  ctVersao := dmDatabase.sdsVersao.CommandText;
+  dmDatabase.sqVersaoAtual.Close;
+  dmDatabase.sqVersaoAtual.Open;
+  i := dmDatabase.sqVersaoAtualVERSAO_BANCO.AsInteger;
+  dmDatabase.qMax.Close;
+  dmDatabase.qMax.Open;
+  i2 := dmDatabase.qMaxID.AsInteger;
+  i  := i + 1;
+  while i <= i2 do
+  begin
+    lblVersaoLocal.Caption := FormatFloat('0000',i);
+    lblVersaoLocal.Refresh;
+    Refresh;
+    Sleep(1000);
+    Application.ProcessMessages;
+
+    dmDatabase.cdsVersao.close;
+    dmDatabase.sdsVersao.CommandText := ctVersao + ' AND ID = ' + IntToStr(i) + ' AND PROGRAMA_ID = 1 ';
+    dmDatabase.cdsVersao.Open;
+    if not dmDatabase.cdsVersao.IsEmpty then
+    begin
+      try
+        sds := TSQLDataSet.Create(nil);
+        sds.SQLConnection := dmDatabase.scoDados;
+        sds.NoMetadata    := True;
+        sds.GetMetadata   := False;
+        vFlag2 := 1;
+
+        S := dmDatabase.cdsVersaoSCRIPT.AsString;
+        vFlag := True;
+        while vFlag do
+        begin
+          DelimiterPos := Pos('}', S);
+          if DelimiterPos = 0 then
+            DelimiterPos := Length(S);
+          Command:= Copy(S, 1, DelimiterPos - 1);
+          if pos('COMMIT',UpperCase(Command)) <= 0 then
+            vSQL_Ant := Command;
+
+          dmDatabase.sdsExec.CommandText := (Command);
+          if trim(dmDatabase.sdsExec.CommandText) <> '' then
+          begin
+            ID.TransactionID  := 99;
+            ID.IsolationLevel := xilREADCOMMITTED;
+            dmDatabase.scoDados.StartTransaction(ID);
+            try
+              dmDatabase.sdsExec.ExecSQL(True);
+              dmDatabase.scoDados.Commit(ID);
+            except
+              WriteLn(F,'----------------------------');
+              WriteLn(F,'Versão: ' + dmDatabase.cdsVersaoID.AsString + ' = ' + vSQL_Ant);
+              vErro := True;
+              if trim(vMSGErro) = '' then
+                vMSGErro := 'Verificar erro de script no arquivo de log: ' + arqLog;
+              vMSGErro := vMSGErro + #13 + 'Versão : ' + FormatFloat('0000',dmDatabase.cdsVersaoID.AsInteger);
+              dmDatabase.scoDados.Rollback(ID);
+            end;
+          end;
+          Delete(S, 1, DelimiterPos);
+          if Length(S) = 0 then
+            vFlag := False;
+        end;
+        dmDatabase.sdsExec.CommandText := ('UPDATE PARAMETROS SET VERSAO_BANCO = ' + dmDatabase.cdsVersaoID.AsString);
+        dmDatabase.sdsExec.ExecSQL(True);
+
+      finally
+        //if trim(arqLog) <> '' then
+        //  CloseFile(F);
+        //if not(vErro) then
+        //  DeleteFile(arqLog);
+        sds.Close;
+        sds.NoMetadata    := True;
+        sds.GetMetadata   := False;
+        sds.CommandText   := ' UPDATE TABELALOC SET FLAG = 0 WHERE TABELA = ' + QuotedStr('INICIO');
+        sds.ExecSQL();
+
+        FreeAndNil(sds);
+      end;
+    end;
+
+    i := i + 1;
+    if i <= i2 then
+    begin
+      dmDatabase.scoDados.Connected := False;
+      dmDatabase.scoDados.Connected := True;
+    end;
+  end;
+
+  if trim(arqLog) <> '' then
+    CloseFile(F);
+  if not(vErro) then
+    DeleteFile(arqLog);
+
+  if vErro then
+    MessageDlg(vMSGErro,mtError,[mbOk],0);
+
+  dmDatabase.cdsVersao.Close;
+  dmDatabase.scoDados.Connected := False;
+  dmDatabase.sqVersaoAtual.Close;
+  dmDatabase.scoAtualiza.Connected := False;
 end;
 
 end.

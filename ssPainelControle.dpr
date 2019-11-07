@@ -7,7 +7,8 @@ uses
   uBackUp in 'uBackUp.pas' {frmBackUp},
   uFrmSobre in 'uFrmSobre.pas' {frmSobre},
   uConfigEdit in 'uConfigEdit.pas' {frmConfigEdit},
-  uDmDatabase in 'uDmDatabase.pas' {dmDatabase: TDataModule};
+  uDmDatabase in 'uDmDatabase.pas' {dmDatabase: TDataModule},
+  DmdDatabase_NFeBD in 'DmdDatabase_NFeBD.pas' {dmDatabase_NFeBD: TDataModule};
 
 {$R *.res}
 
@@ -15,6 +16,7 @@ begin
   Application.Initialize;
   Application.Title := 'SSPainelControle';
   Application.CreateForm(TdmDatabase, dmDatabase);
+  Application.CreateForm(TdmDatabase_NFeBD, dmDatabase_NFeBD);
   Application.CreateForm(TfMenu, fMenu);
   Application.Run;
 end.
