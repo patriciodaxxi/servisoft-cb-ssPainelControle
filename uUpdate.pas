@@ -501,7 +501,6 @@ begin
   AssignFile(F,arqLog);
   ReWrite(F);
 
-
   vMSGErro := '';
   ctVersao := dmDatabase.sdsVersao.CommandText;
   dmDatabase.sqVersaoAtual.Close;
@@ -569,16 +568,7 @@ begin
         dmDatabase.sdsExec.ExecSQL(True);
 
       finally
-        //if trim(arqLog) <> '' then
-        //  CloseFile(F);
-        //if not(vErro) then
-        //  DeleteFile(arqLog);
         sds.Close;
-        sds.NoMetadata    := True;
-        sds.GetMetadata   := False;
-        sds.CommandText   := ' UPDATE TABELALOC SET FLAG = 0 WHERE TABELA = ' + QuotedStr('INICIO');
-        sds.ExecSQL();
-
         FreeAndNil(sds);
       end;
     end;
