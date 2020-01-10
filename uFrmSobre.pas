@@ -31,14 +31,15 @@ begin
   Memo1.Lines.Add('ServiSoft Informática Ltda.');
   Memo1.Lines.Add('www.servisoft.com.br');
   Memo1.Lines.Add('Email: servisoft@servisoft.com.br');
-  Memo1.Lines.Add('Fone: (51) 3598-6584');
+  Memo1.Lines.Add('Fone: (51) 3598-6584 ');
   Memo1.Lines.Add('');
   Memo1.Lines.Add('Suporte:');
-  Memo1.Lines.Add(' Cleomar - Cel.: (51) 9942-0952');
-  Memo1.Lines.Add(' Carlos - Cel.: (51) 9240-0477');
-  Memo1.Lines.Add('msn: cleomarpacheco@hotmail.com');
+  Memo1.Lines.Add(' Cleomar - Cel.: (51) 99942-0952');
+  Memo1.Lines.Add(' Carlos - Cel.: (51) 99240-0477');
   Memo1.Lines.Add('Email: cleomar@servisoft.com.br');
   Memo1.Lines.Add('');
+  Memo1.Lines.Add('');
+  Memo1.Lines.Add('Versão 1.0.1 10/01/2020');
 //  Memo1.Lines.Add('Versão: ' + GetBuildInfo(GetCurrentDir + '\SSFacil.EXE'));
 end;
 

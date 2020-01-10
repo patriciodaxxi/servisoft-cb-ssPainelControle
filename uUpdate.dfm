@@ -152,7 +152,9 @@ object frmUpdate: TfrmUpdate
         'SSF'#225'cil_Prod'
         'SSF'#225'cil_MDFE'
         'SSUtilit'#225'rios'
-        'BackUp')
+        'BackUp'
+        'BuscaIBPT'
+        'SSNFCe')
       ParentFont = False
       TabOrder = 0
     end

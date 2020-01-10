@@ -5,7 +5,7 @@ object fMenu: TfMenu
   BorderStyle = bsSingle
   Caption = 'fMenu - Painel de Controle'
   ClientHeight = 89
-  ClientWidth = 278
+  ClientWidth = 277
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,7 +19,7 @@ object fMenu: TfMenu
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
-    Width = 278
+    Width = 277
     Height = 84
     AutoSize = True
     ButtonHeight = 80

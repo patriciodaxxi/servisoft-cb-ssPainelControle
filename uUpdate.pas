@@ -228,6 +228,46 @@ begin
         //Aplica a data do arquivo original do ftp no arquivo baixado
         FileSetDate(arquivo_local,DateTimeToFileDate(ftpupdate.DirectoryListing.Items[0].ModifiedDate));
       end;
+    end;
+
+    //10/01/2020
+    if CheckListBox1.Checked[8] then   //BuscaIBPT
+    begin
+      Gauge1.ForeColor   := clYellow;
+      Shape1.Brush.Color := clYellow;
+      Label3.Caption     := 'BuscaIBPT';
+      ftpupdate.get('BuscaIBPT.zip','BuscaIBPT.zip',true);
+      tamanho_arquivo := ftpupdate.Size('BuscaIBPT.zip');
+
+      //comparar tamanho original com baixado
+      if tamanho_arquivo = fMenu.DSiFileSize(Copy('BuscaIBPT.exe',1,Length('BuscaIBPT.exe')-4)+'.zip') then
+      begin
+        RenameFile('BuscaIBPT.exe',Copy('BuscaIBPT.exe',1,Length('BuscaIBPT.exe')-3)+ FormatDateTime('YYYY-MM-DD_HH-NN',Now));
+        Descompacta('BuscaIBPT.zip');
+
+        //Aplica a data do arquivo original do ftp no arquivo baixado
+        FileSetDate(arquivo_local,DateTimeToFileDate(ftpupdate.DirectoryListing.Items[0].ModifiedDate));
+      end;
+    end;
+
+    //10/01/2020
+    if CheckListBox1.Checked[9] then   //SSNFCe
+    begin
+      Gauge1.ForeColor   := clYellow;
+      Shape1.Brush.Color := clYellow;
+      Label3.Caption     := 'SSNFCe';
+      ftpupdate.get('SSNFCe.zip','SSNFCe.zip',true);
+      tamanho_arquivo := ftpupdate.Size('SSNFCe.zip');
+
+      //comparar tamanho original com baixado
+      if tamanho_arquivo = fMenu.DSiFileSize(Copy('SSNFCe.exe',1,Length('SSNFCe.exe')-4)+'.zip') then
+      begin
+        RenameFile('SSNFCe.exe',Copy('SSNFCe.exe',1,Length('SSNFCe.exe')-3)+ FormatDateTime('YYYY-MM-DD_HH-NN',Now));
+        Descompacta('SSNFCe.zip');
+
+        //Aplica a data do arquivo original do ftp no arquivo baixado
+        FileSetDate(arquivo_local,DateTimeToFileDate(ftpupdate.DirectoryListing.Items[0].ModifiedDate));
+      end;
     end;              
 
     if CheckListBox1.Checked[5] then   //MDFe

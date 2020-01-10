@@ -156,8 +156,8 @@ object frmSobre: TfrmSobre
   end
   object Memo1: TMemo
     Left = 0
-    Top = 79
-    Width = 465
+    Top = 86
+    Width = 473
     Height = 264
     Align = alBottom
     Font.Charset = DEFAULT_CHARSET
