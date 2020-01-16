@@ -47,7 +47,7 @@ object frmUpdate: TfrmUpdate
       Height = 13
       Align = alTop
       Alignment = taRightJustify
-      Caption = 'Vers'#227'o 07/11/2019'
+      Caption = 'Vers'#227'o 15/01/2020b'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -154,7 +154,8 @@ object frmUpdate: TfrmUpdate
         'SSUtilit'#225'rios'
         'BackUp'
         'BuscaIBPT'
-        'SSNFCe')
+        'SSNFCe'
+        'ConsultaCNPJ')
       ParentFont = False
       TabOrder = 0
     end

@@ -268,7 +268,27 @@ begin
         //Aplica a data do arquivo original do ftp no arquivo baixado
         FileSetDate(arquivo_local,DateTimeToFileDate(ftpupdate.DirectoryListing.Items[0].ModifiedDate));
       end;
-    end;              
+    end;
+
+    //15/01/2020
+    if CheckListBox1.Checked[10] then   //SSNFCe
+    begin
+      Gauge1.ForeColor   := clYellow;
+      Shape1.Brush.Color := clYellow;
+      Label3.Caption     := 'ConsultaCNPJ.zip';
+      ftpupdate.get('ConsultaCNPJ.zip','ConsultaCNPJ.zip',true);
+      tamanho_arquivo := ftpupdate.Size('ConsultaCNPJ.zip');
+
+      //comparar tamanho original com baixado
+      if tamanho_arquivo = fMenu.DSiFileSize(Copy('ConsultaCNPJ.exe',1,Length('ConsultaCNPJ.exe')-4)+'.zip') then
+      begin
+        RenameFile('ConsultaCNPJ.exe',Copy('ConsultaCNPJ.exe',1,Length('ConsultaCNPJ.exe')-3)+ FormatDateTime('YYYY-MM-DD_HH-NN',Now));
+        Descompacta('ConsultaCNPJ.zip');
+
+        //Aplica a data do arquivo original do ftp no arquivo baixado
+        FileSetDate(arquivo_local,DateTimeToFileDate(ftpupdate.DirectoryListing.Items[0].ModifiedDate));
+      end;
+    end;
 
     if CheckListBox1.Checked[5] then   //MDFe
     begin
