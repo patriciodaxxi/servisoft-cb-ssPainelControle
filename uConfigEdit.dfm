@@ -20,12 +20,12 @@ object frmConfigEdit: TfrmConfigEdit
   object s: TRzPageControl
     Left = 0
     Top = 0
-    Width = 507
-    Height = 392
-    ActivePage = TabSheet1
+    Width = 515
+    Height = 400
+    ActivePage = TabSheet4
     ActivePageDefault = TabSheet1
     Align = alClient
-    TabIndex = 0
+    TabIndex = 4
     TabOrder = 0
     FixedDimension = 19
     object TabSheet1: TRzTabSheet
@@ -424,7 +424,7 @@ object frmConfigEdit: TfrmConfigEdit
         Height = 21
         PasswordChar = '*'
         TabOrder = 2
-        Text = 'cliente'
+        Text = '297sl2'
       end
       object Edit11: TEdit
         Left = 112
@@ -468,8 +468,8 @@ object frmConfigEdit: TfrmConfigEdit
       end
       object Panel2: TPanel
         Left = 0
-        Top = 256
-        Width = 503
+        Top = 263
+        Width = 511
         Height = 114
         Align = alBottom
         TabOrder = 9
@@ -492,7 +492,7 @@ object frmConfigEdit: TfrmConfigEdit
         object Label33: TLabel
           Left = 1
           Top = 1
-          Width = 124
+          Width = 509
           Height = 22
           Align = alTop
           Alignment = taCenter
@@ -640,8 +640,8 @@ object frmConfigEdit: TfrmConfigEdit
   end
   object Panel1: TPanel
     Left = 0
-    Top = 392
-    Width = 507
+    Top = 400
+    Width = 515
     Height = 37
     Align = alBottom
     TabOrder = 1
